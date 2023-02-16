@@ -1,0 +1,37 @@
+Guess the Number Process Mapping
+
+the game is first called with `node index.js`= start
+/***Computer asks human to pick limit = pickHighNum
+/***Human picks limit = pickMaxNum
+Computer asks human to pick number = mysteryNum
+Human picks number = parseInt(mysteryNum);
+Number saved in memory bank elsewhere
+computer picks random number within limit
+human answers with a yes/no
+computer analyzes response as true/false
+	if true, asks higher/lower (unless it is the correct #!)
+	if false, re-prompts
+human answers with higher/lower
+computer analyzes response as true/false
+	if true, computer guesses new number
+	if false, re-prompts
+(repeat until computer comes to correct number and human acknowledges)
+victory console log (total # tries)
+
+
+
+***possible processes required
+async await, readline (process.stdin/out) & (function ask)
+conditionals for true/false analysis
+selected number must be compared with numberChosen (first == or !=, second > or <)
+Math.randomfloor (idk if that's right)
+
+
+REVERSE GAME
+Computer prompts human to select computer guesser or computer picker - if guesser, cycle to above - if picker, continue below
+Computer selects a random number
+Computer asks human to guess the number
+Computer will analyze humanResponse == or != to computerSelectedNumber
+	If ==, Print response & Victory message
+	If !=, computer will analyze > or <, then print both responses and prompt human for another guess (loop until ==)
+
