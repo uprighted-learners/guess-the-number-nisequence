@@ -1,26 +1,29 @@
 Guess the Number Process Mapping
 
-the game is first called with `node index.js`= start
+/***the game is first called with `node index.js`= start
 /***Computer asks human to pick limit = pickHighNum
 /***Human picks limit = pickMaxNum
-Computer asks human to pick number = mysteryNum
-Human picks number = parseInt(mysteryNum);
-Number saved in memory bank elsewhere
-computer picks random number within limit
-human answers with a yes/no
-computer analyzes response as true/false
-	if true, asks higher/lower (unless it is the correct #!)
-	if false, re-prompts
-human answers with higher/lower
-computer analyzes response as true/false
-	if true, computer guesses new number
-	if false, re-prompts
-(repeat until computer comes to correct number and human acknowledges)
-victory console log (total # tries)
+	/***convert to int = highNum
+/***Computer asks human to pick number = pickMysteryNum
+/***Human picks number
+	/***parseInt;
+/***Number saved in memory bank elsewhere = mysteryNum
+/***computer picks random number within limit = numMath
+/***human answers with a yes/no = pivotNum
+	/***=== "n" OR (||) === "N"
+/***computer analyzes response as true/false
+	/***if true, asks higher/lower (unless it is the correct #!) = highLow
+	/***if false, re-prompts
+/***human answers with higher/lower = flipCoin
+/***computer analyzes response as true/false
+	/***if true, computer guesses new number
+	/***if false, re-prompts
+/***(repeat until computer comes to correct number and human acknowledges)
+/***victory console log (total # tries)
 
 
 
-***possible processes required
+~~possible processes required
 async await, readline (process.stdin/out) & (function ask)
 conditionals for true/false analysis
 selected number must be compared with numberChosen (first == or !=, second > or <)
