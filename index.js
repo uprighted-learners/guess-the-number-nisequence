@@ -46,11 +46,10 @@ async function start() {
       let numSelection = false;
 
       // ask human to pick mystery num
-      let pickMysteryNum = await ask(`\nPlease choose a number between ${minNum} and ${highNum}.\nDon't worry, I'll keep my eyes closed!\n`);
-  
-      
       
       while (numSelection) false; {
+        let pickMysteryNum = await ask(`\nPlease choose a number between ${minNum} and ${highNum}.\nDon't worry, I'll keep my eyes closed!\n`);
+
         pickMysteryNum;
 
         let mysteryNum = parseInt(pickMysteryNum);
