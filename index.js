@@ -26,139 +26,149 @@ async function start() {
   // console.log("Let's play a game where you (human) make up a number and I (computer) try to guess it.")
   // let secretNumber = await ask("What is your secret number?\nI won't peek, I promise...\n");
   // console.log('You entered: ' + secretNumber);
-
+  
   // Now try and complete the program.
   // Example async await function to ask for highest number (max)
   async function pickHighNum() {
     // Asking the user for highest number
     let pickMaxNum = await ask(`\nPlease choose a number greater than ${minNum}: `);
-
+    
     // Grab the value of user input
     let highNum = parseInt(pickMaxNum);
+    
+    if (highNum != pickMaxNum) {
+      // if user does not select something valid
+      console.log("\n...\nNo fair! I don't know how to guess things like that!");
+      
+      // cycle back through to max # selection
+      pickHighNum();
+      
+    } else if (highNum <= minNum) {
+      // confirm number is greater than one
+      console.log("Thought you could pull one over on me, eh?");
+      
+      // cycle back through to max # selection
+      pickHighNum();
 
-    // Confirmation message print
-    console.log(`\nYou set ${highNum} as the highest value possible.`);
-
+    } else {
+      // Confirmation message print
+      console.log(`\nYou set ${highNum} as the highest value possible.`);
+      
+    };
+    
     learnMysteryNum();
-
+    
     async function learnMysteryNum() {
       
       // ask human to pick mystery num
-
       let pickMysteryNum = await ask(`\nPlease choose a number between ${minNum} and ${highNum}.\nDon't worry, I'll keep my eyes closed!\n`);
-
+      
       pickMysteryNum;
-
-      const mysteryNum = parseInt(pickMysteryNum);
-
+      
+      let mysteryNum = parseInt(pickMysteryNum);
+      
       mysteryNum;
-
-      console.log(mysteryNum);
-    
-      console.log(`\nYou entered: ${mysteryNum}`);
-
+      
       if (mysteryNum > highNum) {
         console.log("Sorry, that's too high!");
         learnMysteryNum();
       } else if (mysteryNum < minNum) {
         console.log("Uhhh, that's a little too low.");
         learnMysteryNum();
-      } else if (mysteryNum == NaN) {
+      } else if (pickMysteryNum != mysteryNum) {
         console.log("...What is THAT?");
         learnMysteryNum();
       } else {
-        console.log("That works great!")
-        console.log(mysteryNum);
-        let numMath = Math.floor(Math.random() * highNum) + 1;
-        numMath;
-
+        console.log("That works great!");
         guessNum();
-        async function guessNum() {
-          console.log(mysteryNum);
-          let pivotNum = await ask(`\nIs your secret number: ${numMath}? Y or N?\n`);
-  
-          pivotNum;
-  
+      };
+      async function guessNum() {
+        console.log(`Currently believing that ${mysteryNum} is the secret number and it lies between ${minNum} and ${highNum}.`)
+        let pickGuess = Math.floor(Math.random() * (highNum - minNum)) + 1;
+
+        async function lowerMax() {
+          highNum = pickGuess - 1;
+          pickGuess = Math.floor(Math.random() * (highNum - minNum)) + 1;
+          console.log(`Lowering maximum to ${highNum}.`);
+          analysis();
+        };
+
+        async function raiseMin() {
+          minNum = pickGuess + 1;
+          pickGuess = Math.floor(Math.random() * (highNum - minNum)) + 1;
+          console.log(`Raising minimum to ${minNum}.`);
+          analysis();
+        };
+
+        async function analysis() {
+          let pivotNum = await ask(`\nIs your secret number: ${pickGuess}? Y or N?\n`);
+            
+          console.log(`\nYou entered: ${pivotNum}`);
           if (pivotNum === "Y" || pivotNum === "y") {
             console.log("Processing...");
-            if (mysteryNum === numMath) {
-              let playAgain = await ask("\nI KNEW it! Thanks for playing. That was fun!\nDo you want to play again? Y or N?\n");
-              playAgain;
-              if (playAgain === "Y" || playAgain === "y") {
-                console.log("Fantastic! I'll see you in a bit!");
-                start();
-              } else {
-                console.log("Okay, no hard feelings. Have a great day! See you next time. :-)");
-              }
+            if (mysteryNum === pickGuess) {
+              async function gameOver() {
+                let playAgain = await ask("\nI KNEW it! Thanks for playing. That was fun!\n\nDo you want to play again? Y or N?\n");
+                playAgain;
+                if (playAgain === "Y" || playAgain === "y") {
+                  console.log("\nFantastic! I'll see you in a bit!");
+                  start();
+                } else {
+                  console.log("Okay, no hard feelings. Have a great day! See you next time. :-)");
+                  process.exit(); //! EXITS
+                };
+              };
+              gameOver();
             } else {
               console.log("Wait, that seemed too easy. Are you sure that was right?");
-              guessNum();
+              analysis();
             };
           } else if (pivotNum === "N" || pivotNum === "n") {
             console.log("Processing your response...");
-            if (mysteryNum === numMath) {
-              console.log("Hey, no fair! Let's be honest here.");
-              pivotNum;
+            if (mysteryNum === pickGuess) {
+              let question = await ask("Hey, no fair! Let's be honest here.\nDid I get it right or what?");
+              question;
+              gameOver();
             } else {
               console.log("Hmm, I see...");
               highLow();
-              async function highLow() {
-                highNum;
-                minNum;
-                console.log(mysteryNum);
-
-                let flipCoin = await ask(`\nIs your secret number higher or lower than ${numMath}? H or L?\n`);
-  
-                flipCoin;
-  
-                if (flipCoin === "H" || flipCoin === "h") {
-                  console.log("Processing...");
-                  mysteryNum; // Why is this NaN
-                  console.log(mysteryNum);
-                  if (mysteryNum > numMath) {
-                    console.log("this fired");
-                    console.log("That's good to know!");
-                    minNum = numMath;
-                    let numMath = Math.floor(Math.random() * highNum) + 1;
-                    numMath;
-                    guessNum();
-                  } else {
-                    console.log("Wait, something's off. Are you sure that was right?");
-                    highLow();
-                  };
-
-                } else if (flipCoin === "L" || flipCoin === "l") {
-                  console.log("Processing your response...");
-                  if (mysteryNum < numMath) {
-                    console.log("Thanks for the info!");
-                    highNum = numMath;
-                    let numMath = Math.floor(Math.random() * highNum) + 1;
-                    numMath;
-                    guessNum();
-                  } else {
-                    console.log("Be honest, now...");
-                    highLow();
-                  };
-                } else {
-                  console.log("Sorry, I can't understand your response.");
-                  highLow();
-                };
-              
-              };
             };
           } else {
             console.log("Sorry, I don't understand your response.");
-            guessNum();
-          };  
-        }
-            
-      }; // end of else
-    };
+            analysis();
+          };  // end of yes/no/else pivot function
+        };
+        analysis();
+        async function highLow() {
+          let flipCoin = await ask(`\nIs your secret number higher or lower than ${pickGuess}? H or L?\n`);
+          let caps = flipCoin.toUpperCase();
+          console.log(`\nYou entered: ${caps}`);
+          if (caps === "H") {
+            console.log("Processing...");
+            if (mysteryNum > pickGuess) {
+              console.log("That's good to know!");
+              raiseMin();
+            } else {
+              console.log("\n...\nWait, something's off. Are you sure that was right?");
+              highLow();
+            };
+          } else if (caps === "L") {
+            console.log("Processing your response...");
+            if (mysteryNum < pickGuess) {
+              console.log("Thanks for the info!");
+              lowerMax();
+            } else {
+              console.log("Be honest, now...");
+              highLow();
+            };
+          } else {
+            console.log("\nSorry, I can't understand your response. Let's try that again.");
+            highLow();
+          };
+        };
+        };
+      };
   };
-
   // Calling the pick high number function
   pickHighNum();
-
 };
-// Stops the start function from running, "exits"
- // ! process.exit();
