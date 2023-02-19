@@ -86,25 +86,13 @@ async function start() {
       async function guessNum() {
         console.log(`\nSo now I'm going to guess a number between ${minNum} and ${highNum}.\nYou'll tell me if it's right or wrong.\nIf I'm wrong, I'll need to know whether it's higher or lower.\n`)
         let pickGuess = Math.floor(Math.random() * (highNum - minNum)) + 1;
-
-        async function lowerMax() {
-          highNum = pickGuess - 1;
-          pickGuess = Math.floor(Math.random() * (highNum - minNum)) + 1;
-          console.log(`Lowering maximum to ${highNum}.`);
-          analysis();
-        };
-
-        async function raiseMin() {
-          minNum = pickGuess + 1;
-          pickGuess = Math.floor(Math.random() * (highNum - minNum)) + 1;
-          console.log(`Raising minimum to ${minNum}.`);
-          analysis();
-        };
-
+        let attempts = 1;
+        
         async function analysis() {
-          // ! list number of tries
+          console.log(`Currently on attempt #${attempts} to guess your number.`)
           // ask user if the guess is correct
           let pivotNum = await ask(`\nIs your secret number: ${pickGuess}? Y or N?\n`);
+          // ! currently not referencing raiseMin/lowerMax functions!
           // use only first value of pivotNum string
           let chopAnswer = pivotNum[0];
           // capitalize chopAnswer
@@ -155,7 +143,11 @@ async function start() {
             console.log("Processing...");
             if (mysteryNum > pickGuess) {
               console.log("\nThat's good to know!");
-              raiseMin();
+              attempts++;
+              minNum = pickGuess + 1;
+              pickGuess = Math.floor(Math.random() * (highNum - minNum)) + 1;
+              console.log(`Raising minimum to ${minNum}.`);
+              analysis();
             } else {
               console.log("\n...\nWait, something's off. Are you sure that was right?");
               highLow();
@@ -164,7 +156,11 @@ async function start() {
             console.log("Processing your response...");
             if (mysteryNum < pickGuess) {
               console.log("Thanks for the info!");
-              lowerMax();
+              attempts++;
+              highNum = pickGuess - 1;
+              pickGuess = Math.floor(Math.random() * (highNum - minNum)) + 1;
+              console.log(`Lowering maximum to ${highNum}.`);
+              analysis();
             } else {
               console.log("Be honest, now...");
               highLow();
