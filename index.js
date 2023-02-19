@@ -45,7 +45,7 @@ async function start() {
       
     } else if (highNum <= minNum) {
       // confirm number is greater than one
-      console.log("Thought you could pull one over on me, eh?");
+      console.log("\nThought you could pull one over on me, eh?");
       
       // cycle back through to max # selection
       pickHighNum();
@@ -69,6 +69,7 @@ async function start() {
       
       mysteryNum;
       
+      // Verify that mystery number is valid
       if (mysteryNum > highNum) {
         console.log("Sorry, that's too high!");
         learnMysteryNum();
@@ -83,7 +84,7 @@ async function start() {
         guessNum();
       };
       async function guessNum() {
-        console.log(`Currently believing that ${mysteryNum} is the secret number and it lies between ${minNum} and ${highNum}.`)
+        console.log(`\nSo now I'm going to guess a number between ${minNum} and ${highNum}.\nYou'll tell me if it's right or wrong.\nIf I'm wrong, I'll need to know whether it's higher or lower.\n`)
         let pickGuess = Math.floor(Math.random() * (highNum - minNum)) + 1;
 
         async function lowerMax() {
@@ -101,10 +102,17 @@ async function start() {
         };
 
         async function analysis() {
+          // ! list number of tries
+          // ask user if the guess is correct
           let pivotNum = await ask(`\nIs your secret number: ${pickGuess}? Y or N?\n`);
-            
-          console.log(`\nYou entered: ${pivotNum}`);
-          if (pivotNum === "Y" || pivotNum === "y") {
+          // use only first value of pivotNum string
+          let chopAnswer = pivotNum[0];
+          // capitalize chopAnswer
+          let capitalizeChop = chopAnswer.toUpperCase();
+          // state formatted answer to user
+          console.log(`\nYou entered: ${capitalizeChop}`);
+
+          if (capitalizeChop === "Y") {
             console.log("Processing...");
             if (mysteryNum === pickGuess) {
               async function gameOver() {
@@ -123,7 +131,7 @@ async function start() {
               console.log("Wait, that seemed too easy. Are you sure that was right?");
               analysis();
             };
-          } else if (pivotNum === "N" || pivotNum === "n") {
+          } else if (capitalizeChop === "N") {
             console.log("Processing your response...");
             if (mysteryNum === pickGuess) {
               let question = await ask("Hey, no fair! Let's be honest here.\nDid I get it right or what?");
@@ -141,18 +149,18 @@ async function start() {
         analysis();
         async function highLow() {
           let flipCoin = await ask(`\nIs your secret number higher or lower than ${pickGuess}? H or L?\n`);
-          let caps = flipCoin.toUpperCase();
-          console.log(`\nYou entered: ${caps}`);
-          if (caps === "H") {
+          let capsAnswer = flipCoin.toUpperCase();
+          console.log(`\nYou entered: ${capsAnswer}`);
+          if (capsAnswer === "H") {
             console.log("Processing...");
             if (mysteryNum > pickGuess) {
-              console.log("That's good to know!");
+              console.log("\nThat's good to know!");
               raiseMin();
             } else {
               console.log("\n...\nWait, something's off. Are you sure that was right?");
               highLow();
             };
-          } else if (caps === "L") {
+          } else if (capsAnswer === "L") {
             console.log("Processing your response...");
             if (mysteryNum < pickGuess) {
               console.log("Thanks for the info!");
