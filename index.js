@@ -80,12 +80,13 @@ async function start() {
         console.log("...What is THAT?");
         learnMysteryNum();
       } else {
+        console.log(`\nYou've selected ${mysteryNum} as your secret number.`)
         console.log("That works great!");
         guessNum();
       };
       async function guessNum() {
         console.log(`\nSo now I'm going to guess a number between ${minNum} and ${highNum}.\nYou'll tell me if it's right or wrong.\nIf I'm wrong, I'll need to know whether it's higher or lower.\n`)
-        let pickGuess = Math.floor(Math.random() * (highNum - minNum)) + 1;
+        let pickGuess = Math.floor((highNum + minNum) / 2)
         let attempts = 1;
         
         async function analysis() {
@@ -100,20 +101,21 @@ async function start() {
           // state formatted answer to user
           console.log(`\nYou entered: ${capitalizeChop}`);
 
+          async function gameOver() {
+            let playAgain = await ask("\nI KNEW it! Thanks for playing. That was fun!\n\nDo you want to play again? Y or N?\n");
+            playAgain;
+            if (playAgain === "Y" || playAgain === "y") {
+              console.log("\nFantastic! I'll see you in a bit!");
+              start();
+            } else {
+              console.log("Okay, no hard feelings. Have a great day! See you next time. :-)");
+              process.exit(); //! EXITS
+            };
+          };
+
           if (capitalizeChop === "Y") {
             console.log("Processing...");
             if (mysteryNum === pickGuess) {
-              async function gameOver() {
-                let playAgain = await ask("\nI KNEW it! Thanks for playing. That was fun!\n\nDo you want to play again? Y or N?\n");
-                playAgain;
-                if (playAgain === "Y" || playAgain === "y") {
-                  console.log("\nFantastic! I'll see you in a bit!");
-                  start();
-                } else {
-                  console.log("Okay, no hard feelings. Have a great day! See you next time. :-)");
-                  process.exit(); //! EXITS
-                };
-              };
               gameOver();
             } else {
               console.log("Wait, that seemed too easy. Are you sure that was right?");
@@ -122,7 +124,7 @@ async function start() {
           } else if (capitalizeChop === "N") {
             console.log("Processing your response...");
             if (mysteryNum === pickGuess) {
-              let question = await ask("Hey, no fair! Let's be honest here.\nDid I get it right or what?");
+              let question = await ask("Hey, no fair! Let's be honest here.\nDid I get it right or what?\n");
               question;
               gameOver();
             } else {
@@ -145,7 +147,7 @@ async function start() {
               console.log("\nThat's good to know!");
               attempts++;
               minNum = pickGuess + 1;
-              pickGuess = Math.floor(Math.random() * (highNum - minNum)) + 1;
+              pickGuess = Math.floor((highNum + minNum) / 2)
               console.log(`Raising minimum to ${minNum}.`);
               analysis();
             } else {
@@ -158,7 +160,7 @@ async function start() {
               console.log("Thanks for the info!");
               attempts++;
               highNum = pickGuess - 1;
-              pickGuess = Math.floor(Math.random() * (highNum - minNum)) + 1;
+              pickGuess = Math.floor((highNum + minNum) / 2)
               console.log(`Lowering maximum to ${highNum}.`);
               analysis();
             } else {
