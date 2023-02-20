@@ -90,16 +90,16 @@ async function start() {
           let range = maximum - minimum;
           function multiplierCalc(rangeNum) {
               if (rangeNum <= 5) {
-                let multiplier = 0.95;
+                let multiplier = 0.99;
                 return multiplier;
               } else if (rangeNum > 5 && rangeNum <= 10) {
-                let multiplier = 0.8;
+                let multiplier = 0.85;
                 return multiplier;
               } else if (rangeNum > 10 && rangeNum <= 24) {
-                  let multiplier = 0.7;
+                  let multiplier = 0.75;
                   return multiplier;
               } else if (rangeNum > 24 && rangeNum <= 74) {
-                  let multiplier = 0.6;
+                  let multiplier = 0.65;
                   return multiplier;
               } else {
                   let multiplier = 0.55;
@@ -112,7 +112,7 @@ async function start() {
           let smartMax = maximum - range + smartRange;
           let random = Math.random();
           let randomNum = Math.ceil((random*smartRange) + minimum);
-          while (randomNum > smartMax || randomNum < smartMin) {
+          while (randomNum > Math.ceil(smartMax) || randomNum < Math.floor(smartMin)) {
               // ! want to make sure guess is valid and reasonable
               randomNum = Math.floor((Math.random()*smartRange) + smartMin);
           };
