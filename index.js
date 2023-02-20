@@ -60,6 +60,7 @@ async function start() {
     
     async function learnMysteryNum() {
       
+      
       // ask human to pick mystery num
       let pickMysteryNum = await ask(`\nPlease choose a number between ${minNum} and ${highNum}.\nDon't worry, I'll keep my eyes closed!\n`);
       
@@ -85,8 +86,43 @@ async function start() {
         guessNum();
       };
       async function guessNum() {
-        console.log(`\nSo now I'm going to guess a number between ${minNum} and ${highNum}.\nYou'll tell me if it's right or wrong.\nIf I'm wrong, I'll need to know whether it's higher or lower.\n`)
-        let pickGuess = Math.floor((highNum + minNum) / 2)
+        function smartGuess(minimum, maximum) {
+          let range = maximum - minimum;
+          function multiplierCalc(rangeNum) {
+              if (rangeNum <= 5) {
+                let multiplier = 0.95;
+                return multiplier;
+              } else if (rangeNum > 5 && rangeNum <= 10) {
+                let multiplier = 0.8;
+                return multiplier;
+              } else if (rangeNum > 10 && rangeNum <= 24) {
+                  let multiplier = 0.7;
+                  return multiplier;
+              } else if (rangeNum > 24 && rangeNum <= 74) {
+                  let multiplier = 0.6;
+                  return multiplier;
+              } else {
+                  let multiplier = 0.55;
+                  return multiplier;
+              };
+          }
+          let multiply = multiplierCalc(range);
+          let smartRange = range*multiply;
+          let smartMin = minimum + range - smartRange;
+          let smartMax = maximum - range + smartRange;
+          let random = Math.random();
+          let randomNum = Math.ceil((random*smartRange) + minimum);
+          while (randomNum > smartMax || randomNum < smartMin) {
+              // ! want to make sure guess is valid and reasonable
+              randomNum = Math.floor((Math.random()*smartRange) + smartMin);
+          };
+          let numGuess = randomNum;
+          return numGuess;
+        };
+        
+        console.log(`\nSo now I'm going to guess a number between ${minNum} and ${highNum}.\nYou'll tell me if it's right or wrong.\nIf I'm wrong, I'll need to know whether it's higher or lower.\n`);
+        smartGuess(minNum, highNum);
+        let pickGuess = smartGuess(minNum, highNum);
         let attempts = 1;
         
         async function analysis() {
@@ -124,7 +160,7 @@ async function start() {
           } else if (capitalizeChop === "N") {
             console.log("Processing your response...");
             if (mysteryNum === pickGuess) {
-              let question = await ask("Hey, no fair! Let's be honest here.\nDid I get it right or what?\n");
+              let question = await ask("Hey, no fair! Let's be honest here.\nDid I get it right or what? I'll peek if you won't tell me...\n");
               question;
               gameOver();
             } else {
@@ -147,7 +183,7 @@ async function start() {
               console.log("\nThat's good to know!");
               attempts++;
               minNum = pickGuess + 1;
-              pickGuess = Math.floor((highNum + minNum) / 2)
+              pickGuess = smartGuess(minNum, highNum);
               console.log(`Raising minimum to ${minNum}.`);
               analysis();
             } else {
@@ -160,7 +196,7 @@ async function start() {
               console.log("Thanks for the info!");
               attempts++;
               highNum = pickGuess - 1;
-              pickGuess = Math.floor((highNum + minNum) / 2)
+              pickGuess = smartGuess(minNum, highNum);
               console.log(`Lowering maximum to ${highNum}.`);
               analysis();
             } else {
