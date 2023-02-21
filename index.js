@@ -23,15 +23,10 @@ async function start() {
   console.log("Let's play a game where you (human) make up a number and I (computer) try to guess it.")
   console.log("-------------------------");
   let minNum = 1;
-  // console.log("Let's play a game where you (human) make up a number and I (computer) try to guess it.")
-  // let secretNumber = await ask("What is your secret number?\nI won't peek, I promise...\n");
-  // console.log('You entered: ' + secretNumber);
-  
-  // Now try and complete the program.
-  // Example async await function to ask for highest number (max)
+
   async function pickHighNum() {
     // Asking the user for highest number
-    let pickMaxNum = await ask(`\nPlease choose a number greater than ${minNum}: `);
+    let pickMaxNum = await ask(`\nPlease choose a number greater than ${minNum} for the upper limit: `);
     
     // Grab the value of user input
     let highNum = parseInt(pickMaxNum);
@@ -59,7 +54,6 @@ async function start() {
     learnMysteryNum();
     
     async function learnMysteryNum() {
-      
       
       // ask human to pick mystery num
       let pickMysteryNum = await ask(`\nPlease choose a number between ${minNum} and ${highNum}.\nDon't worry, I'll keep my eyes closed!\n`);
@@ -96,10 +90,7 @@ async function start() {
                 let multiplier = 0.85;
                 return multiplier;
               } else if (rangeNum > 10 && rangeNum <= 24) {
-                  let multiplier = 0.75;
-                  return multiplier;
-              } else if (rangeNum > 24 && rangeNum <= 74) {
-                  let multiplier = 0.65;
+                  let multiplier = 0.70;
                   return multiplier;
               } else {
                   let multiplier = 0.55;
@@ -129,7 +120,6 @@ async function start() {
           console.log(`Currently on attempt #${attempts} to guess your number.`)
           // ask user if the guess is correct
           let pivotNum = await ask(`\nIs your secret number: ${pickGuess}? Y or N?\n`);
-          // ! currently not referencing raiseMin/lowerMax functions!
           // use only first value of pivotNum string
           let chopAnswer = pivotNum[0];
           // capitalize chopAnswer
@@ -171,7 +161,7 @@ async function start() {
             console.log("Sorry, I don't understand your response.");
             analysis();
           };  // end of yes/no/else pivot function
-        };
+        }; // end of analysis function
         analysis();
         async function highLow() {
           let flipCoin = await ask(`\nIs your secret number higher or lower than ${pickGuess}? H or L?\n`);
