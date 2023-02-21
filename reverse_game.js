@@ -54,20 +54,13 @@ async function start() {
                 let range = maximum - minNum1;
                 let guess = Math.floor(Math.random()*range + 1);
                 
-                // ! DELETE THIS BEFORE FINAL PUSH
-                console.log(guess, "-- Just for testing purposes!");
-                // ! DELETE
-                
                 if (guess >= minNum1 && guess <= maximum) {
                     console.log("Selecting a random number within the range selected...");
                     let compNumGuess = guess;
-                    console.log(compNumGuess, "-- Just for testing purposes, again!");
                     let attempts = 1;
+                    console.log("\nOK, I've got my number.");
                     async function letHumanGuess(compNumPick, tries) {
-                        // ! DELETE THIS BEFORE FINAL PUSH
-                        console.log(compNumPick, "-- Just for testing purposes!");
-                        // ! DELETE
-                        let humanGuess = await ask(`\nOK, I've got my number. What is your guess #${tries}?\n`);
+                        let humanGuess = await ask(`What is your guess #${tries}?\n`);
                         let roundGuess = parseInt(humanGuess);
                         //let roundGuess = Math.round(findGuess);
                         console.log(`\nIt looks like you guessed ${roundGuess}.\nLet me see if that's right...\n`);
@@ -80,10 +73,10 @@ async function start() {
                             tries = tries + 1;
                             letHumanGuess(compNumPick, tries);
                         } else if (roundGuess == compNumPick) {
-                            console.log("WOW! You got it! Great job.");
-                            console.log(`You found my number in ${tries} guess(es)!`);
                             async function gameOver() {
-                                let playAgain = await ask("\nI KNEW it! Thanks for playing. That was fun!\n\nDo you want to play again? Y or N?\n");
+                                console.log("WOW! You got it! Great job.");
+                                console.log(`You found my number in ${tries} guess(es)!`);
+                                let playAgain = await ask("Thanks for playing. That was fun!\n\nDo you want to play again? Y or N?\n");
                                 playAgain;
                                 if (playAgain === "Y" || playAgain === "y") {
                                     console.log("\nFantastic! I'll see you in a bit!");
@@ -99,15 +92,15 @@ async function start() {
                             tries = tries + 1;
                             letHumanGuess(compNumPick, tries);
                         }; // end of if else within letHumanGuess
-                        letHumanGuess(compNumGuess, attempts);
                     }; // end of letHumanGuess
+                    letHumanGuess(compNumGuess, attempts);
                 } else {
                     console.log("*Blushes*");
                     console.log(`I almost picked ${guess} as my number. Whoops! Let me try something else.`);
-                    pickMysteryNum(minNum1, maximum);
-                };
+                }; // end of if else within pickMysteryNum
                 return guess;
             }; // end of pickMysteryNum
+            pickMysteryNum(minNum2, highNum);
         }; // end of if else within pickHighNum
     };
     pickHighNum(minNum);
